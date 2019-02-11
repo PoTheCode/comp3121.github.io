@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>comp3121</ttile>
+    <title>comp3121</title>
     <script type="text/javascript">
       var queryString = window.location.search.slice(1);
       // if qurey string exists
@@ -10,4 +10,8 @@
       }
     </script>
   </head>
+  
+  <body>
+  TBD
+  </body>
 </html>
