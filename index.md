@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>comp3121</title>
