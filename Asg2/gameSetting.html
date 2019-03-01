@@ -1,0 +1,88 @@
+<html>
+<head>
+<title>Game Setting</title>
+<script src="js/gamecore.js"></script>
+<script src="js/timer.js"></script>
+<script src="js/checkCollisions.js"></script>
+<script src="js/enemy.js"></script>
+<script src="js/overlay.js"></script>
+<script src="js/graphic.js"></script>
+<script src="js/player.js"></script>
+<script src="js/score.js"></script>
+<script src="js/bgm.js"></script>
+<script type="text/javascript">
+	var row;
+	var col;
+	var inputs=[];
+	function elv(){
+	
+		var r = 5;
+		var c = 11;
+		updateLevel(r,c);
+
+	}
+	function hlv(){
+
+		var r = 7;
+		var c = 15;
+		updateLevel(r,c);
+
+	}
+	function updateLevel(r,c){
+		row = r;
+		col = c;
+		startSetting();
+	}
+
+	function startSetting(){
+	var HTML = "";
+	var num = 0;
+	for(var i=0;i<row;i++){
+		for(var j=0;j<col;j++){
+			HTML+="<input type='number' style ='width:50;' id='s"+num+"' min='0' max='100' value='0'/>";
+			HTML+=" ";
+   			num++;
+		}
+		HTML += "<br/>";
+	}
+	HTML += "<br/>";
+	HTML += "<input type='button' id= 'submit' value='submit' style='width:600);' onclick='inputSetting()'/>";
+	document.getElementById("set").innerHTML = HTML;   	
+	}
+
+	function inputSetting(){
+		var num = 0;
+		inputs = [];
+		var test = document.getElementById("s0").value;
+		for(var i=0;i<row;i++){
+			for(var j = 0;j<col;j++){
+				var ivalue = document.getElementById('s'+num).value;
+				num++;
+				inputs.push({
+					position_score: ivalue,
+					set: 1,
+				});
+			}
+		}
+		
+	for(var i in inputs){
+		var input = inputs[i];
+		document.write(input.position_score);
+	}
+	}
+
+
+
+
+
+
+    	
+</script> 
+</head>
+ <body>
+ 	<h1>Select The Level You Want to Set</h1>
+	<input type="button" value="Easy Level" onclick="elv()" style="width:500;" />
+	<input type="button" value="Hard Level" onclick="hlv()" style="width:500;" />
+	<div id="set"></div>
+</body>
+</html>

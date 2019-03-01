@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+	function WriteFile()
+{
+
+var fh = fopen("php/test.txt", 3); // Open the file for writing
+
+if(fh!=-1) // If the file has been successfully opened
+{
+    var str = "Some text goes here...";
+    fwrite(fh, str); // Write the string to a file
+    fclose(fh); // Close the file 
+}else write("Error");
+
+}
+
+WriteFile();
+</script>
+</body onload="WriteFile()">
+</html>

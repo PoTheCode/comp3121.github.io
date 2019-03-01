@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chang Password</title>
+</head>
+<body>
+<p>Change Password</p>
+<form id="form2" name="form2" method="post" action="php/changePW.php">
+	<p>User Name:
+    	<label>
+      		<input type="text" name="userName" id="userName" />
+    	</label>
+  	</p>
+ 	<p>Current Password:
+    	<label>
+      		<input type="password" name="userPassword" id="userPassword" />
+    	</label>
+  	</p>
+
+  	<p>New Password
+  		<label>
+  			<input type="password" name="newPassword" id="newPassword"/>
+  		</label>
+  	</p>
+  	<p>
+    	<label>
+      		<input type="submit" name="button" id="button" value="Submit" />
+    	</label>
+      <label>
+          <input type="button" name="button2" id="button2" value="Return" onclick="window.history.back();" />
+      </label>
+  	</p>
+</form>
+</body>
+</html>

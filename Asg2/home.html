@@ -1,0 +1,280 @@
+<!--//== 	Student ID: 15005057D 
+			Name: LEE PO WING
+			Lab assignment 1
+			Created by LEE PO WING   ==//-->
+			
+<!DOCTYPE html>
+<html>
+<head>
+<title>SPACE INVADERS</title>
+<style type="text/css">
+canvas {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 860px;
+}
+</style>
+</head>
+<body style="background-color:black;">
+<h1 align="center" style="color:white;font-family:arial;">SPACE INVADERS</h1>
+<!--// ================== aduio ============ -->
+<audio id="bgm1">
+    <source src="res/non-start.mp3" type="audio/mpeg">
+</audio>
+<audio id="bgm2">
+    <source src="res/playing.mp3" type="audio/mpeg">
+</audio>
+<audio id="fire">
+    <source src="res/fire.wav" type="audio/wav">
+</audio>
+<audio id="won">
+    <source src="res/won.mp3" type="audio/mpeg">
+</audio>
+<audio id="over">
+    <source src="res/over.mp3" type="audio/mpeg">
+</audio>
+<audio id="e_hit">
+    <source src="res/e_hit.wav" type="audio/wav">
+</audio>
+<audio id="p_hit">
+    <source src="res/p_hit.wav" type="audio/wav">
+</audio>
+<audio id="o_hit">
+    <source src="res/o_hit.wav" type="audio/wav">
+</audio>
+<audio id="e_fire">
+    <source src="res/e_fire.wav" type="audio/wav">
+</audio>
+
+<!-- ====================canvas==============-->
+<canvas align="center" id="canvas" width="1280" height="760"></canvas>
+
+<script src="js/gamecore.js"></script>
+<script src="js/timer.js"></script>
+<script src="js/checkCollisions.js"></script>
+<script src="js/enemy.js"></script>
+<script src="js/overlay.js"></script>
+<script src="js/graphic.js"></script>
+<script src="js/player.js"></script>
+<script src="js/score.js"></script>
+<script src="js/bgm.js"></script>
+<script type="text/javascript">
+var bg_width = 1280;
+var bg_height = 720;
+var canvas = document.getElementById("canvas");
+var c = canvas.getContext('2d');
+var bmgName;
+
+
+
+
+function mainLoop() {
+	var c = canvas.getContext('2d');
+	var speed = document.getElementById("speedRange").value;
+	//var playerLives = document.getElementById("credit").value;
+
+	updateGame();
+	updateBackground();
+    updateObstacles();
+	updateEnemies(speed);
+	updatePlayer();
+    playbgm();
+    updatePlayerBullets();
+	updateEnemyBullets();
+
+	checkCollisions();
+
+    drawBackground(c);
+	drawEnemies(c);
+	drawPlayer(c);
+    drawObstacles(c);
+	drawEnemyBullets(c);
+	drawPlayerBullets(c);
+    updateLive(c);
+    drawOverlay(c);
+    updateTimer(c);
+    updateScore(c);
+	
+
+    
+}
+
+doSetup();
+var starGame = setInterval(mainLoop,1000/30);
+
+// ==================background music===========
+var non_start = document.getElementById('bgm1');
+var playing = document.getElementById('bgm2');
+var fire = document.getElementById('fire');
+var won = document.getElementById('won');
+var over = document.getElementById('over');
+var p_hit = document.getElementById('p_hit');
+var e_hit = document.getElementById('e_hit');
+var o_hit = document.getElementById('o_hit');
+var e_fire = document.getElementById('e_fire');
+function playbgm(){
+	//volume
+	playing.volume = 0.8;
+	e_fire.volume = 0.6;
+	//Obstacle hit by enemy
+	for (var j in obstacles){
+		var Obstacle = obstacles[j];
+		if(Obstacle.state=="hit"){
+			o_hit.play();
+		}
+	}
+
+
+	// hit by player & enemy fire
+	for(var i in enemies){
+		var enemy = enemies[i]
+		if(enemy.state=="hit"){
+			e_hit.play();
+		}
+		if(enemy.fired=="on"){
+			
+			e_fire.load();
+			e_fire.play();
+		}
+	}
+
+	//hit by emeny
+	if(player.state=="hit"){
+		p_hit.play();
+	}
+
+
+	//player fire
+	if(keyboard[32]&&keyboard.fired==true){
+		fire.load();
+		fire.play();
+	}
+
+	// bgm
+
+	if(game.state=="non-start"){
+		non_start.play();
+		playing.pause();
+		won.pause();
+		over.pause();
+		if(player.state=="dead"){
+			e_fire.pause();
+		}
+	}
+	if(game.state=="playing"){
+		playing.play();
+		non_start.pause();
+		won.pause();
+		over.pause();
+	}
+	if(game.state=="won"){
+		won.play();
+		non_start.pause();
+		playing.pause();
+		over.pause();
+	}
+	if(game.state == "over"||game.state=="overtime"){
+		over.play();
+		non_start.pause();
+		playing.pause();
+		won.pause()
+		e_fire.pause();
+	}
+
+	if (game.state=="re-game") {
+		non_start.pause();
+		playing.pause();
+		won.pause()
+		over.pause();
+		e_fire.pause();
+	};
+	
+}
+// ======mute======
+function mute(){
+	non_start.muted = true;
+	playing.muted = true;
+	fire.muted = true;
+	won.muted = true;
+	p_hit.muted = true;
+	e_hit.muted = true;
+	o_hit.muted = true;
+	e_fire.muted = true;
+	over.muted = true;
+}
+// ======unmute======
+function unmute(){
+	non_start.muted = false;
+	playing.muted = false;
+	fire.muted = false;
+	won.muted = false;
+	p_hit.muted = false;
+	e_hit.muted = false;
+	o_hit.muted = false;
+	e_fire.muted = false;
+	over.muted = false;
+}
+
+function elv(){
+	
+	var r = 5;
+	var c = 11;
+	updateLevel(r,c);
+
+}
+function hlv(){
+
+	var r = 7;
+	var c = 15;
+	updateLevel(r,c);
+}
+function updateLevel(r,c){
+	row = r;
+	col = c;
+	startSetting();
+}
+
+function startSetting(){
+	var HTML ="";
+	var num = 0;
+	var s = row*10;
+	for(var i=0;i<row;i++){
+		for(var j=0;j<col;j++){
+			HTML += "<input type='number' style ='width:50;' id='s"+num+"' min='0' max='100' value='"+s+ "'/>";
+			HTML += " ";
+   			num++;
+
+		}
+		HTML += "<br/>";
+		s-=10;
+	}
+	HTML += "<br/>";
+	HTML += "<input type='button' id= 'submit' value='submit' style='width:600;' onclick='inputSetting()'/>";
+	document.getElementById("set").innerHTML = HTML;
+}
+
+   
+
+
+</script>
+<p align="center">
+	<input type="button" value="Change Easy Level Setting" onclick="elv()"  />
+	<input type="button" value="Change Hard Level Setting" onclick="hlv()"  />
+	<font style="color:white;font-family:arial;">  Change Lives (between 1 and 10):</font>
+	<input type="number" name="credit" id="credit" min="1" max="10" value="3">
+	<input type="button" value="Set" onclick="toDo()">
+	
+</p>
+<p align="center">
+	<input type="range" id="speedRange"/><font style="color:white;font-family:arial;">Enemy Speed Bar</font>
+</p>
+<p align = "center">
+	<input type="button" value ="Mute" onClick="mute()"/>
+	<input type="button" value ="Unmute" onClick="unmute()"/>
+</p>
+<div id="set" align="center"></div>
+</body>
+</html>
